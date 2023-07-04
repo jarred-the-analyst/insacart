@@ -1,0 +1,43 @@
+with tmp as
+(	select 
+		count(distinct user_id) as total_users
+from #order_dept_produ_table odp join instacart_p.dbo.orders o on odp.order_id=o.order_id
+		
+)
+, tmp2 as (select 
+	department,
+	count(distinct user_id) amount_purchase_per_d
+from #order_dept_produ_table odp join instacart_p.dbo.orders o on odp.order_id=o.order_id 
+group by
+	department)
+select
+	department,
+	amount_purchase_per_d,
+	cast((amount_purchase_per_d/cast(total_users as numeric))*100 as decimal(10,3)) as amount_o_user_who_purcase_d
+from tmp2 cross join tmp
+order by amount_o_user_who_purcase_d desc
+
+14 % of users purchase personal care
+
+dept	amount_purchase_per_d	ratio_o_user_who_purcase_d
+produce		32169		78.016
+dairy eggs	29832		72.348
+beverages	21703		52.634
+snacks		20978		50.875
+frozen		18574		45.045
+pantry		17838		43.260
+bakery		13847		33.582
+deli		12454		30.203
+canned goods	11418		27.691
+dry goods pasta	10115		24.531
+meat seafood	9513		23.071
+breakfast	8713		21.131
+household	8160		19.789
+personal care	5917		14.350
+international	4001		9.703
+babies		2573		6.240
+missing		2118		5.137
+alcohol		1176		2.852
+pets		1068		2.590
+other		695		1.686
+bulk		600		1.455
