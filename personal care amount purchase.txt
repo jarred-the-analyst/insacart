@@ -1,0 +1,53 @@
+sql code:
+with tmp as 
+	(
+		select 
+			*
+		from 
+			instacart_p.dbo.order_products_prior 
+		union
+		select 
+			*
+		from 
+			instacart_p.dbo.order_products_train
+	)  , tmp2 as
+
+ (
+		select
+			order_id,
+			count(*) as how_many_items_in_basket,
+			ntile(100) over (order by count(*)) as percentiles
+
+		from instacart_p.dbo.products p join instacart_p.dbo.departments d on p.department_id=d.department_id
+			  join tmp on p.product_id=tmp.product_id
+
+		group by 
+			order_id
+), tmp3 as
+(
+		select
+			order_id,
+			how_many_items_in_basket,
+			ntile(100) over (order by how_many_items_in_basket) as percentile
+		from 
+			tmp2
+		where order_id in (select order_id from instacart_p.dbo.products p join instacart_p.dbo.departments d on p.department_id=d.department_id
+			 right join tmp on p.product_id=tmp.product_id where department='personal care')
+		
+)
+select 
+	min(tmp2.how_many_items_in_basket) median_purchase_total,
+	min(tmp3.how_many_items_in_basket) median_purchase_personal_c
+from 
+	tmp2 join tmp3 on tmp2.percentiles=tmp3.percentile
+where percentiles >=50 and percentile >= 50;
+
+
+the meadian amount of items in the basket is much higher in the personal care department. potential upsale.
+use median because of outliers like the 127 items in cart. avarage would be skwed 
+
+median_purchase_total	median_purchase_personal_c
+
+8				11
+
+

@@ -1,0 +1,37 @@
+sql code:
+
+select 
+	department,
+	sum(reordered) num_reorders,
+	cast(100*(sum(reordered)/cast(count(*) as numeric))as decimal (10,2)) reorder_ratio
+from #order_dept_produ_table odp join instacart_p.dbo.orders o on odp.order_id=o.order_id
+group by 
+	department
+order by reorder_ratio desc
+
+not only do many users not reorder personal care items the users that do reorder do not reorder at high rate. personal care is
+the lowest on reorder ratios
+
+
+dept		amount_reorder	reorder_ratio
+dairy eggs	69323		67.19
+produce		123702		65.91
+beverages	34799		65.73
+bakery		14631		63.49
+pets		1251		62.30
+deli		12721		61.02
+snacks		32770		58.19
+alcohol		1538		58.15
+meat seafood	8045		57.74
+babies		4181		56.64
+breakfast	7791		56.18
+bulk		383		55.75
+frozen		24769		55.03
+dry goods pasta	8305		48.20
+canned goods	10180		47.53
+household	6397		42.09
+other		320		41.13
+international	2023		38.03
+missing		1002		37.39
+pantry		13423		36.31
+personal care	3180		33.66
