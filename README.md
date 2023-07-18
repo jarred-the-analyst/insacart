@@ -249,10 +249,10 @@ where percentiles >=50 and percentile >= 50;
 ```
 # result 
 
-the meadian amount of items in the basket is much higher in the personal care department. potential upsale.
-use median because of outliers like the 127 items in cart. avarage would be skwed 
+the maedian amount of items in the basket is much higher in the personal care department. potential upsell.
+use median because of outliers like the 127 items in the cart. average would be skewed 
 
-median_purchase_total	median_purchase_personal_c
-
-8				11
+| median_purchase_total | median_purchase_personal_c |
+|--|--|
+| 8 |11  |
 
