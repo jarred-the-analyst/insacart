@@ -51,8 +51,9 @@ with tmp as
 		group by 
 			department
 ```
--- quartiles of data
+# quartiles of data
 
+ ```mysql
 with tmp as 
 	(
 		select 
@@ -97,9 +98,10 @@ select
 	min(how_many_items_in_basket)
 from tmp5
 group by dept, per
+```
 
--- creating table 
-
+# creating table 
+ ```mysql
 DROP TABLE #order_dept_produ_table;
 CREATE TABLE #order_dept_produ_table (
   product_id INT,
@@ -129,8 +131,9 @@ select
 	p.product_id,product_name,aisle_id,d.department_id,department,order_id,add_to_cart_order,reordered
 from instacart_p.dbo.products p join instacart_p.dbo.departments d on p.department_id=d.department_id
 right join tmp on p.product_id=tmp.product_id;
-
--- amount of user purcahse in giving dept 
+```
+# amount of user purcahse in giving dept
+ ```mysql
 with tmp as
 (	select 
 		count(distinct user_id) as total_users
@@ -149,8 +152,10 @@ select
 	cast((amount_purchase_per_d/cast(total_users as numeric))*100 as decimal(10,3)) as amount_o_user_who_purcase_d
 from tmp2 cross join tmp
 order by amount_o_user_who_purcase_d desc
+```
 
--- average reorder time
+# average reorder time
+ ```mysql
 select 	
 	department,
 	cast(avg(days_since_prior_order)as decimal(10,2)) avg_time_for_reorder,
@@ -158,8 +163,10 @@ select
 from #order_dept_produ_table odp join instacart_p.dbo.orders o on odp.order_id=o.order_id
 where reordered=1
 group by 
-	department 
--- likeihood_of_reorder
+	department
+```
+# likeihood_of_reorder
+ ```mysql
 with tmp as
 (	-- manipulating data so i can preform functions on users who have reorder items in specific deparments
 		select 
@@ -181,9 +188,10 @@ with tmp as
 		from tmp
 		group by 
 			department
+```
 
--- reorder ratio
-
+# reorder ratio
+ ```mysql
 select 
 	department,
 	sum(reordered) num_reorders,
@@ -192,8 +200,10 @@ from #order_dept_produ_table odp left join instacart_p.dbo.orders o on odp.order
 group by 
 	department
 order by reorder_ratio desc
+```
 
--- median amount items in basket
+# median amount items in basket when personal care was purchase first
+ ```mysql
 with tmp as 
 	(
 		select 
@@ -236,12 +246,13 @@ select
 from 
 	tmp2 join tmp3 on tmp2.percentiles=tmp3.percentile
 where percentiles >=50 and percentile >= 50;
-
+```
+# result 
 
 the meadian amount of items in the basket is much higher in the personal care department. potential upsale.
 use median because of outliers like the 127 items in cart. avarage would be skwed 
 
 median_purchase_total	median_purchase_personal_c
 
-8				12
+8				11
 
