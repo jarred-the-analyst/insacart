@@ -3,6 +3,9 @@
 https://github.com/jarred-the-analyst/insacart/assets/136924918/7eb3f241-056b-46a8-9231-7b3f22c0c980
 
 
+https://github.com/jarred-the-analyst/insacart/assets/136924918/456e6e5c-f495-4138-8781-ebbc3b80d6cc
+
+
 
 
 
@@ -290,4 +293,6 @@ using median because of outliers like the 127 items in the cart  would skew the 
 |produce| 10
 |beverages| 10
 |alcohol|  7
+
+
 
