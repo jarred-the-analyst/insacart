@@ -25,6 +25,10 @@ with tmp as
 	(
 		select 
 			*
+
+https://github.com/jarred-the-analyst/insacart/assets/136924918/1f6bb14f-5aeb-4b02-b554-9514502ca06d
+
+
 		from 
 			instacart_p.dbo.order_products_prior 
 		union
