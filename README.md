@@ -210,44 +210,68 @@ with tmp as
 			*
 		from 
 			instacart_p.dbo.order_products_train
-	)  , tmp2 as
+	), tmp2 as 
+	(select
+			d.department as dept,
+			order_id
 
- (
-		select
+
+		from instacart_p.dbo.products p join instacart_p.dbo.departments d on p.department_id=d.department_id
+		join tmp on p.product_id=tmp.product_id
+)
+, tmp3 as(select
 			order_id,
-			count(*) as how_many_items_in_basket,
-			ntile(100) over (order by count(*)) as percentiles
+			count(*) as how_many_items_in_basket
 
 		from instacart_p.dbo.products p join instacart_p.dbo.departments d on p.department_id=d.department_id
 			  join tmp on p.product_id=tmp.product_id
 
 		group by 
-			order_id
-), tmp3 as
-(
-		select
-			order_id,
-			how_many_items_in_basket,
-			ntile(100) over (order by how_many_items_in_basket) as percentile
-		from 
-			tmp2
-		where order_id in (select order_id from instacart_p.dbo.products p join instacart_p.dbo.departments d on p.department_id=d.department_id
-			 right join tmp on p.product_id=tmp.product_id where department='personal care')
-
-)
-select 
-	min(tmp2.how_many_items_in_basket) median_purchase_total,
-	min(tmp3.how_many_items_in_basket) median_purchase_personal_c
-from 
-	tmp2 join tmp3 on tmp2.percentiles=tmp3.percentile
-where percentiles >=50 and percentile >= 50;
+			order_id),
+tmp4 as (select
+	distinct dept,
+	how_many_items_in_basket,
+	tmp2.order_id
+from tmp2 join tmp3 on tmp2.order_id=tmp3.order_id)
+, tmp5 as (select 
+dept,
+how_many_items_in_basket,
+ntile(100) over (partition by dept order by how_many_items_in_basket) as per
+from tmp4)
+select
+	dept as cat,
+	min(how_many_items_in_basket) per
+from tmp5
+where per >= 50
+group by dept
+order by 2 desc;
 ```
 # result 
 
 the maedian amount of items in the basket is much higher in the personal care department. potential upsell.
 use median because of outliers like the 127 items in the cart. average would be skewed 
 
-| median_purchase_total | median_purchase_personal_c |
+| cat| median_purchase_per_c |
 |--|--|
-| 8 |11  |
+|babies|	15 
+|international| 15
+|missing|	14
+|bulk|		14
+|canned goods|	14
+|dry goods pasta|14
+|bakery|	13
+|breakfast|	13
+|meat seafood| 13
+|deli| 13
+|snacks|12
+|pets| 12
+|other|12
+|pantry| 12
+|frozen| 12
+|household| 11
+|dairy eggs| 11
+|personal care| 11
+|produce| 10
+|beverages| 10
+|alcohol|  7
 
