@@ -248,8 +248,8 @@ order by 2 desc;
 ```
 # result 
 
-the maedian amount of items in the basket is much higher in the personal care department. potential upsell.
-use median because of outliers like the 127 items in the cart. average would be skewed 
+
+using median because of outliers like the 127 items in the cart  would skew the average
 
 | cat| median_purchase_per_c |
 |--|--|
