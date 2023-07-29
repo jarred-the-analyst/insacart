@@ -25,6 +25,14 @@ order by t_d desc
 ```
 # total sales for each department
  ```mysql
+
+https://github.com/jarred-the-analyst/insacart/assets/136924918/61d5444e-1605-46d4-8457-81711a0a4816
+
+
+
+https://github.com/jarred-the-analyst/insacart/assets/136924918/bdcce613-371f-46d2-9c3e-bb63bcdd3d27
+
+
 with tmp as 
 	(
 		select 
